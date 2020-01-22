@@ -1,6 +1,8 @@
 #include <iostream>
 #include <map>
 #include "allocator.h"
+#include "contaiter.h"
+#include <list>
 
 struct hard
 {
@@ -15,11 +17,11 @@ struct hard
 };
 
 int main() {
-    const int N = 10;
-    std::map<int, hard, std::less<int>, this_is_allocator<std::pair<const int, hard>, 10>> container;
-    for(int i=0;i<10;i++)
-        container.emplace(std::piecewise_construct, std::forward_as_tuple(i), std::forward_as_tuple(i, i));
-    for(auto &[i, v] : container)
-        std::cout << i << " " << v.fa << " " << v.fi << std::endl;
-    return 0;
+  const int N = 10;
+  this_is_list<int> _list;
+  for(int i = 0; i <10; i++)
+    _list.push_back(i);
+  for(auto i = _list.begin(); i != _list.end(); i++)
+    std::cout << *i << std::endl;
+  return 0;
 }
