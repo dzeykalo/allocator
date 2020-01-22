@@ -21,7 +21,7 @@ int main() {
   this_is_list<int> _list;
   for(int i = 0; i <10; i++)
     _list.push_back(i);
-  for(auto i = _list.begin(); i != _list.end(); i++)
-    std::cout << *i << std::endl;
+  for(auto &i : _list)
+    std::cout << i << std::endl;
   return 0;
 }
