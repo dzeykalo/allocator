@@ -1,6 +1,6 @@
 #pragma once
 
-template <typename T, size_t Size>
+template <typename T>
 struct this_is_allocator
 {
     using size_type       = size_t;
@@ -13,7 +13,8 @@ struct this_is_allocator
 
     pointer allocate(size_type st)
     {
-        auto ptr = malloc(sizeof(T)*Size);
+        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        auto ptr = malloc(sizeof(T)*st);
         if (ptr == nullptr)
             throw std::bad_alloc();
         return reinterpret_cast<pointer>(ptr);
@@ -39,6 +40,6 @@ struct this_is_allocator
     }
     template <typename U>
     struct rebind {
-        using other = this_is_allocator<U,Size>;
+        using other = this_is_allocator<U>;
     };
 };

@@ -2,59 +2,60 @@
 #include <iostream>
 
 template <typename T>
-struct link
-{
-    T data;
-    link* next;
-};
-
-template <typename T>
 class iterator
 {
 private:
-    link<T>* first;
+    T* data;
 public:
 
-    iterator(): first(nullptr){};
-    iterator(link<T>* first): first(first){};
-    T& operator *(){ return first->data;}
-    iterator operator++()
-    {
-        first = first->next;
-        return *this;
-    }
-    bool operator!=(const iterator &itr){return first != itr.first;}
-    bool operator==(const iterator &itr){return first == itr.first;}
+    iterator(): data(nullptr){};
+    iterator(T* d): data(d){};
+    T& operator [](int n){ return data[n];}
+    T& operator *(){ return *data;}
+    iterator operator++(){return data++;}
+    bool operator!=(const iterator &itr){return data != itr.data;}
+    bool operator==(const iterator &itr){return data == itr.data;}
 };
 
 template <typename T, typename A>
-class this_is_list
+class other_vector
 {
 private:
-    link<T>* first;
+    size_t sz;
+    T* data;
+    size_t space;
     A alloc;
 public:
 
-    this_is_list():first(nullptr){};
-    ~this_is_list()
+    other_vector():data(nullptr),sz(0),space(0){};
+    ~other_vector()
     {
-      link<T>* current = first;
-      link<T>* dell = first;
-      while (current != nullptr)
+      for(size_t i = 0; i < sz; i++)
       {
-        current = current->next;
-        alloc.deallocate(dell,1);
-        dell = current;
+        alloc.destroy(&data[i]);
       }
-    };
+      alloc.deallocate(data, space);
+    }
+    void reserve (size_t new_alloc)
+    {
+      if (new_alloc < space) return;
+      T* new_malloc = alloc.allocate(new_alloc);
+      for(size_t i = 0; i < sz; i++)
+      {
+        alloc.construct(&new_malloc[i], data[i]);
+        alloc.destroy(&data[i]);
+      }
+      alloc.deallocate(data, space);
+      data = new_malloc;
+      space = new_alloc;
+    }
     void push_back(T d)
     {
-        link<T>* new_link = alloc.allocate(1);
-        alloc.construct(&new_link->data,d);
-        alloc.construct(&new_link->next,first);
-        first = new_link;
-
+        if (space == sz)
+          reserve(space+10);
+        alloc.construct(&data[sz],d);
+        sz++;
     }
-    iterator<T> begin(){return iterator<T>(first);}
-    iterator<T> end(){return iterator<T>();}
+    iterator<T> begin(){return iterator<T>(data);}
+    iterator<T> end(){return iterator<T>(&data[sz]);}
 };

@@ -3,6 +3,7 @@
 #include "allocator.h"
 #include "contaiter.h"
 #include <list>
+#include <vector>
 #include "hard.h"
 
 struct hard
@@ -19,14 +20,13 @@ struct hard
 
 int main() {
   const int N = 10;
-  this_is_list<int, this_is_allocator<link<int>,10>> _list;
+  //this_is_list<int, this_is_allocator<link<int>,10>> _list;
+  other_vector<int, this_is_allocator<int>> _vector;
   for(int i = 0; i <10; i++)
   {
-    //_list.push_back(i);
-    std::cout << i << " " << fibonacci<int>(i) << std::endl;
+    _vector.push_back(i);
   }
-
-  /*for(auto &i : _list)
-    std::cout << i << std::endl;*/
+  for(auto i : _vector)
+    std::cout << i << std::endl;
   return 0;
 }
