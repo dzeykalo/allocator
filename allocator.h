@@ -1,7 +1,7 @@
 #pragma once
 
 template <typename T>
-struct this_is_allocator
+struct other_allocator
 {
     using size_type       = size_t;
     using difference_type = ptrdiff_t;
@@ -13,7 +13,7 @@ struct this_is_allocator
 
     pointer allocate(size_type st)
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        /*std::cout << __PRETTY_FUNCTION__ << std::endl;*/
         auto ptr = malloc(sizeof(T)*st);
         if (ptr == nullptr)
             throw std::bad_alloc();
@@ -22,24 +22,24 @@ struct this_is_allocator
 
     void deallocate (pointer p, size_type st)
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        /*std::cout << __PRETTY_FUNCTION__ << std::endl;*/
         free(p);
     }
 
     template<typename U, typename... Args>
     void construct (U *p, Args&&... args)
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        /*std::cout << __PRETTY_FUNCTION__ << std::endl;*/
         new(p) U(std::forward<Args>(args)...);
     }
 
     void destroy (pointer p)
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        /*std::cout << __PRETTY_FUNCTION__ << std::endl;*/
         p->~value_type();
     }
     template <typename U>
     struct rebind {
-        using other = this_is_allocator<U>;
+        using other = other_allocator<U>;
     };
 };

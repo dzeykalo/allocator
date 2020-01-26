@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+const int container_size = 10;
+
 template <typename T>
 class iterator
 {
@@ -26,7 +28,6 @@ private:
     size_t space;
     A alloc;
 public:
-
     other_vector():data(nullptr),sz(0),space(0){};
     ~other_vector()
     {
@@ -36,6 +37,7 @@ public:
       }
       alloc.deallocate(data, space);
     }
+    template<typename... Args>
     void reserve (size_t new_alloc)
     {
       if (new_alloc < space) return;
@@ -49,11 +51,12 @@ public:
       data = new_malloc;
       space = new_alloc;
     }
-    void push_back(T d)
+    template<typename... Args>
+    void push_back(Args &&... args)
     {
         if (space == sz)
-          reserve(space+10);
-        alloc.construct(&data[sz],d);
+          reserve(space+container_size);
+        alloc.construct(&data[sz],std::forward<Args>(args)...);
         sz++;
     }
     iterator<T> begin(){return iterator<T>(data);}

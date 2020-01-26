@@ -1,4 +1,17 @@
 
+struct hard
+{
+    int fa;
+    int fi;
+    hard(int fa, int fi) : fa(fa), fi(fi) {};
+    hard() : fa(0), fi(0) {};
+    hard(const hard &) = delete;
+    hard(hard &ha) : fa(ha.fa), fi(ha.fi){};
+    hard(hard &&) noexcept = delete;
+    ~hard(){};
+
+};
+
 template <typename T>
 T factorial (T n)
 {

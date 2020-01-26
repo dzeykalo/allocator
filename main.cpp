@@ -1,32 +1,39 @@
 #include <iostream>
+#include <vector>
 #include <map>
 #include "allocator.h"
-#include "contaiter.h"
-#include <list>
-#include <vector>
+#include "container.h"
 #include "hard.h"
 
-struct hard
+int main()
 {
-    int fa;
-    int fi;
-    hard(int fa, int fi) : fa(fa), fi(fi) {};
-    hard() : fa(0), fi(0) {};
-    hard(const hard &) = delete;
-    hard(hard &&) noexcept = delete;
-    ~hard(){};
+    /*################ std::map ####################################*/
+    std::map<int, hard> _map;
+    for(int i = 0; i <10; i++)
+      _map.emplace(std::piecewise_construct, std::forward_as_tuple(i),std::forward_as_tuple(factorial<int>(i), fibonacci<int>(i)));
+    for(auto &i : _map)
+      std::cout << i.first << " " << i.second.fa << " " << i.second.fi << std::endl;
 
-};
+    /*################ std::map + other_allocator ##################*/
+    std::map<int, hard, std::less<int>, other_allocator<hard>> __map;
+    for(int i = 0; i <10; i++)
+        __map.emplace(std::piecewise_construct, std::forward_as_tuple(i),std::forward_as_tuple(factorial<int>(i), fibonacci<int>(i)));
+    for(auto &i : __map)
+        std::cout << i.first << " " << i.second.fa << " " << i.second.fi << std::endl;
 
-int main() {
-  const int N = 10;
-  //this_is_list<int, this_is_allocator<link<int>,10>> _list;
-  other_vector<int, this_is_allocator<int>> _vector;
-  for(int i = 0; i <10; i++)
-  {
-    _vector.push_back(i);
-  }
-  for(auto i : _vector)
-    std::cout << i << std::endl;
-  return 0;
+    /*################ other_vector + std:allocator ################*/
+    other_vector<hard, std::allocator<hard>> _vector;
+    for(int i = 0; i <10; i++)
+        _vector.push_back(factorial<int>(i), fibonacci<int>(i));
+    for(auto &i : _vector)
+        std::cout << i.fa << " " << i.fi << std::endl;
+
+    /*################ other_vector + other_allocator ##############*/
+    other_vector<hard, other_allocator<hard>> __vector;
+    for(int i = 0; i <10; i++)
+        __vector.push_back(factorial<int>(i), fibonacci<int>(i));
+    for(auto &i : __vector)
+        std::cout << i.fa << " " << i.fi << std::endl;
+
+    return 0;
 }
