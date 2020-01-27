@@ -30,10 +30,10 @@ private:
 public:
     other_vector():data(nullptr),sz(0),space(0){};
     template <typename other_alloc>
-    other_vector(other_vector<T,other_alloc> &&oa):other_vector()
+    other_vector(other_vector<T,other_alloc> &&o):other_vector()
     {
       for(size_t i = 0; i < sz; i++)
-        oa.push_back(data[i]);
+        o.push_back(data[i]);
     }
     ~other_vector()
     {

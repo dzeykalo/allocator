@@ -48,7 +48,7 @@ int main()
     for(int i = 0; i <10; i++)
       _from_vector.push_back(factorial<int>(i), fibonacci<int>(i));
     other_vector<hard, std::allocator<hard>> _to_vector = std::move(_from_vector);
-    for(auto &i : _to_vector)
+    for(auto i : _to_vector)
       std::cout << i.fa << " " << i.fi << std::endl;
 
 
