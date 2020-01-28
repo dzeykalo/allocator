@@ -15,6 +15,7 @@ public:
     T& operator [](int n){ return data[n];}
     T& operator *(){ return *data;}
     iterator operator++(){return data++;}
+    iterator operator++(int){return data++;}
     bool operator!=(const iterator &itr){return data != itr.data;}
     bool operator==(const iterator &itr){return data == itr.data;}
 };
@@ -27,13 +28,40 @@ private:
     T* data;
     size_t space;
     A alloc;
+
 public:
     other_vector():data(nullptr),sz(0),space(0){};
-    template <typename other_alloc>
-    other_vector(other_vector<T,other_alloc> &&o):other_vector()
+    template <typename _T, typename _A>
+    other_vector(other_vector<_T,_A> &ov)
     {
-      for(size_t i = 0; i < sz; i++)
-        o.push_back(data[i]);
+      auto itr = ov.begin();
+      if (itr == data) return;
+
+      space = ov.getSpace();
+      T* new_malloc = alloc.allocate(space);
+      sz = 0;
+      for(;itr!=ov.end();itr++)
+      {
+        alloc.construct(&new_malloc[sz], *itr);
+        sz++;
+      }
+      data = new_malloc;
+    }
+    template <typename _T, typename _A>
+    other_vector(other_vector<_T,_A> &&ov)
+    {
+      auto itr = ov.begin();
+      if (itr == data) return;
+
+      space = ov.getSpace();
+      T* new_malloc = alloc.allocate(space);
+      sz = 0;
+      for(;itr!=ov.end();itr++)
+      {
+        alloc.construct(&new_malloc[sz], *itr);
+        sz++;
+      }
+      data = new_malloc;
     }
     ~other_vector()
     {
@@ -65,6 +93,7 @@ public:
         alloc.construct(&data[sz],std::forward<Args>(args)...);
         sz++;
     }
+    size_t getSpace(){return space;}
     iterator<T> begin(){return iterator<T>(data);}
     iterator<T> end(){return iterator<T>(&data[sz]);}
 };
