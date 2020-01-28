@@ -6,7 +6,7 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - g++-7.4
+    - g++-7
     - libboost-test-dev
 script:
 - cmake .
