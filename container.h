@@ -4,20 +4,20 @@
 const int container_size = 10;
 
 template <typename T>
-class iterator
+class iterator_vector
 {
 private:
     T* data;
 public:
 
-    iterator(): data(nullptr){};
-    iterator(T* d): data(d){};
+    iterator_vector(): data(nullptr){};
+    iterator_vector(T* d): data(d){};
     T& operator [](int n){ return data[n];}
     T& operator *(){ return *data;}
-    iterator operator++(){return data++;}
-    iterator operator++(int){return data++;}
-    bool operator!=(const iterator &itr){return data != itr.data;}
-    bool operator==(const iterator &itr){return data == itr.data;}
+    iterator_vector operator++(){return data++;}
+    iterator_vector operator++(int){return data++;}
+    bool operator!=(const iterator_vector &itr){return data != itr.data;}
+    bool operator==(const iterator_vector &itr){return data == itr.data;}
 };
 
 template <typename T, typename A>
@@ -94,6 +94,6 @@ public:
         sz++;
     }
     size_t getSpace(){return space;}
-    iterator<T> begin(){return iterator<T>(data);}
-    iterator<T> end(){return iterator<T>(&data[sz]);}
+    iterator_vector<T> begin(){return iterator_vector<T>(data);}
+    iterator_vector<T> end(){return iterator_vector<T>(&data[sz]);}
 };

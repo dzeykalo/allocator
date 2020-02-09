@@ -7,7 +7,7 @@ endif (NOT "${PRO_PATCH}")
 
 project(allocator VERSION 0.0.${PRO_PATCH})
 
-add_executable(allocator main.cpp allocator.h hard.h container.h)
+add_executable(allocator main.cpp allocator.h hard.h container.h list.h)
 
 set_target_properties(
         allocator PROPERTIES
