@@ -58,10 +58,12 @@ public:
 
     ~other_list()
     {
+        link<T>* dell = first;
         while (first != last)
         {
-            alloc.deallocate(first,1);
             first = first->next;
+            alloc.deallocate(dell,1);
+            dell = first;
         }
         alloc.deallocate(last,1);
     };
