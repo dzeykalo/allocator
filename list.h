@@ -51,20 +51,19 @@ public:
     template <typename _A>
     other_list(other_list<T, _A> &&ol):first(nullptr),last(nullptr)
     {
-        for (auto &i : ol)
-            push_back(i);
+        std::swap(first, ol.first);
+        std::swap(last, ol.last);
+        std::swap(alloc, ol.alloc);
     }
 
     ~other_list()
     {
-        link<T>* current = first;
-        link<T>* dell = first;
-        while (current != nullptr)
+        while (first != last)
         {
-            current = current->next;
-            alloc.deallocate(dell,1);
-            dell = current;
+            alloc.deallocate(first,1);
+            first = first->next;
         }
+        alloc.deallocate(last,1);
     };
     template<typename... Args>
     void push_back(Args &&... args)
