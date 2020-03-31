@@ -1,5 +1,4 @@
 #pragma once
-#include<algorithm>
 
 const size_t space = 10;
 
@@ -38,10 +37,10 @@ public:
     void deallocate (pointer p, size_type st)
     {
 //        std::cout << __PRETTY_FUNCTION__ << std::endl;
-      auto result = std::find(pt_storage.begin(), pt_storage.end(), p);
-      if (result != pt_storage.end()){
-        free(*result);
-        pt_storage.erase(result);
+      sz-=st;
+      if (sz <= 0 && !pt_storage.empty()){
+        free(pt_storage.back());
+        pt_storage.pop_back();
       }
     }
 
